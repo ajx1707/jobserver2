@@ -26,7 +26,7 @@ genai.configure(api_key=GOOGLE_API_KEY)
 app = Flask(__name__)
 
 # Set up MongoDB connection
-MONGO_URI = "mongodb://localhost:27017/jobmatchdb"
+MONGO_URI = "mongodb+srv://jobseek:nA5X5O0D5RUYMjpM@cluster0.98tbj.mongodb.net/signup?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(MONGO_URI)
 db = client.jobmatchdb
 
@@ -784,7 +784,6 @@ def reanalyze_job_applications():
         import traceback
         traceback.print_exc()
         return jsonify({"error": f"Failed to reanalyze applications: {str(e)}"}), 500
-
 if __name__ == "__main__":
     # Check if Gemini API key is valid
     api_available = False
@@ -805,5 +804,6 @@ if __name__ == "__main__":
         print("🔄 Job matching will use rule-based analysis instead of AI")
         print("💡 To use AI matching, please check your Google API key and quota")
     
-    # Start the Flask app even if the API isn't available
-    app.run(debug=True, port=5002) 
+    # Dynamically bind to the port specified by the environment variable or default to 5000
+    port = int(os.getenv("PORT", 5000))
+    app.run(host='0.0.0.0', debug=True, port=port)
